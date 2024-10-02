@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PROG5-NinjaManager")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f79645b6c75ee4e3db16e9709e04f73846d5098b")]
 [assembly: System.Reflection.AssemblyProductAttribute("PROG5-NinjaManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PROG5-NinjaManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
