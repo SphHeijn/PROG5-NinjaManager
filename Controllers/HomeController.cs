@@ -1,26 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
 using PROG5_NinjaManager.Models;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace PROG5_NinjaManager.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly MainContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(MainContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            var ninjas = _context.Ninjas.Include(n => n.Weapons).ToList();
+            return View(ninjas);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
