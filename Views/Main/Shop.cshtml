@@ -59,8 +59,10 @@
                         <td>@equipment.Intelligence</td>
                         <td>@equipment.Agility</td>
                         <td class="text-end">
-                            <a asp-action="EditNinja" asp-route-name="@equipment.Name" class="btn btn-primary btn-sm">Edit</a>
-                            <a asp-action="DeleteNinja" asp-route-name="@equipment.Name" class="btn btn-danger btn-sm">Delete</a>
+                            @if (!string.IsNullOrEmpty(filterType))
+                            {
+                                <a asp-action="Buy" asp-route-equipmentName="@equipment.Name" class="btn btn-success btn-sm">Buy</a>
+                            }
                         </td>
                     </tr>
                 }
