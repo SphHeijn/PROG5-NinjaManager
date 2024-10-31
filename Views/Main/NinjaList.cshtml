@@ -1,0 +1,68 @@
+﻿@model IEnumerable<PROG5_NinjaManager.Ninja>
+@{
+    ViewData["Title"] = "Ninja List";
+}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="page-header">
+    <div class="container h-100 d-flex align-items-center justify-content-between bg-light rounded-0">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item mb-0">
+                    <a asp-action="Index">Home</a>
+                </li>
+                <li class="breadcrumb-item mb-0 active" aria-current="page">Ninja List</li>
+            </ol>
+        </nav>
+
+        <div>
+            <a asp-action="CreateNinja" class="btn btn-primary">Create Ninja</a>
+        </div>
+    </div>
+</div>
+
+<div class="border-top"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between pb-3">
+        <h1 class="fs-3 fw-bold">Ninja Overview</h1>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered bg-white">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Gold</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ninja in Model)
+                {
+                    <tr>
+                        <td>@ninja.Name</td>
+                        <td>@ninja.Gold</td>
+                        <td class="text-end">
+                            <a asp-action="EditNinja" asp-route-name="@ninja.Name" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="DeleteNinja" asp-route-name="@ninja.Name" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    /* Optional styling to enhance the appearance */
+    .page-header {
+        padding: 20px 0;
+    }
+    .border-top {
+        border-top: 1px solid #e9ecef;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+    }
+</style>
