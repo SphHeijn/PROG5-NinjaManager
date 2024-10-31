@@ -1,15 +1,15 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<div class="row flex-nowrap">
-    @Html.Partial("_Sidebar")
-    <div>
-        <main role="main" class="pb-3" style="width: 100%; height: 100% ">
+<body class="d-flex flex-row bg-light" style="height: 100vh">
+    <nav class="d-flex flex-column h-100">
+        @Html.Partial("_Sidebar")
+    </nav>
+        <main role="main" class="w-100 h-100">
             @RenderBody()
         </main>
-    </div>
-</div>
+</body>
 
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </html>
