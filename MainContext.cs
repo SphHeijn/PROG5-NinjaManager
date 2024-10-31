@@ -1,111 +1,164 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 namespace PROG5_NinjaManager
+{
+    public class MainContext : DbContext
     {
-        public class MainContext : DbContext
+        public MainContext(DbContextOptions<MainContext> options) : base(options)
         {
-            public MainContext(DbContextOptions<MainContext> options) : base(options) { }
-
-            // Define DbSets for your tables here
-            public DbSet<Ninja> Ninjas { get; set; }
-            public DbSet<Equipment> Equipments { get; set; }
-            public DbSet<NinjaInventory> NinjaInventories { get; set; }
-
-            protected override void OnModelCreating(ModelBuilder builder)
-            {
-                base.OnModelCreating(builder);
-
-                // Call custom methods for creating relationships and seeding data
-                CreateRelations(builder);
-                SeedData(builder);
-            }
-
-            private static void CreateRelations(ModelBuilder builder)
-            {
-                // Define composite key for NinjaInventory join table
-                builder.Entity<NinjaInventory>()
-                    .HasKey(ni => new { ni.NinjaId, ni.EquipmentId });
-
-                // Configure many-to-many relationship between Ninja and Equipment
-                builder.Entity<NinjaInventory>()
-                    .HasOne(ni => ni.Ninja)
-                    .WithMany(n => n.NinjaInventories)
-                    .HasForeignKey(ni => ni.NinjaId);
-
-                builder.Entity<NinjaInventory>()
-                    .HasOne(ni => ni.Equipment)
-                    .WithMany(e => e.NinjaInventories)
-                    .HasForeignKey(ni => ni.EquipmentId);
-            }
-
-            private static void SeedData(ModelBuilder builder)
-            {
-                // Seed Ninjas
-                builder.Entity<Ninja>().HasData(
-                    new Ninja { Id = 1, Name = "Shadow", Gold = 100 },
-                    new Ninja { Id = 2, Name = "Blade", Gold = 150 }
-                );
-
-                // Seed Equipment
-                builder.Entity<Equipment>().HasData(
-                    new Equipment { Id = 1, Name = "Katana", EquipmentType = EquipmentType.Hand, MonetaryValue = 100, Strength = 15, Intelligence = 5, Agility = 10 },
-                    new Equipment { Id = 2, Name = "Shuriken", EquipmentType = EquipmentType.Hand, MonetaryValue = 50, Strength = 5, Intelligence = 0, Agility = 15 },
-                    new Equipment { Id = 3, Name = "Ninja Armor", EquipmentType = EquipmentType.Chest, MonetaryValue = 200, Strength = 10, Intelligence = 0, Agility = 5 }
-                );
-
-                // Seed NinjaInventory (linking table)
-                builder.Entity<NinjaInventory>().HasData(
-                    new NinjaInventory { NinjaId = 1, EquipmentId = 1, NinjaName = "Shadow", EquipmentName = "Katana" },
-                    new NinjaInventory { NinjaId = 1, EquipmentId = 2, NinjaName = "Shadow", EquipmentName = "Shuriken" },
-                    new NinjaInventory { NinjaId = 2, EquipmentId = 3, NinjaName = "Blade", EquipmentName = "Ninja Armor" }
-                );
-            }
         }
 
-        
+        // Define DbSets for your tables here
+        public DbSet<Ninja> Ninjas { get; set; }
+        public DbSet<Equipment> Equipments { get; set; }
+        public DbSet<NinjaInventory> NinjaInventories { get; set; }
 
-        public class Ninja
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public int Gold { get; set; }
-        
-            public ICollection<NinjaInventory> NinjaInventories { get; set; } = new List<NinjaInventory>();
+            base.OnModelCreating(builder);
+
+            builder.Entity<Equipment>().HasKey(e => e.Name);
+            builder.Entity<Ninja>().HasKey(e => e.Name);
+            
+            CreateRelations(builder);
+            SeedData(builder);
         }
 
-        public class NinjaInventory
+        private static void CreateRelations(ModelBuilder builder)
         {
-            public int NinjaId { get; set; }
-            public Ninja Ninja { get; set; }
+            // Define composite key using NinjaName and EquipmentName
+            builder.Entity<NinjaInventory>()
+                .HasKey(ni => new { ni.NinjaName, ni.EquipmentName });
 
-            public int EquipmentId { get; set; }
-            public Equipment Equipment { get; set; }
+            // Configure many-to-many relationship between Ninja and Equipment using the foreign keys
+            builder.Entity<NinjaInventory>()
+                .HasOne(ni => ni.Ninja)
+                .WithMany(n => n.NinjaInventories)
+                .HasForeignKey(ni => ni.NinjaName); // Foreign key for Ninja
 
-            public string NinjaName { get; set; }
-            public string EquipmentName { get; set; }
+            builder.Entity<NinjaInventory>()
+                .HasOne(ni => ni.Equipment)
+                .WithMany(e => e.NinjaInventories)
+                .HasForeignKey(ni => ni.EquipmentName); // Foreign key for Equipment
         }
 
-        public enum EquipmentType
+        private static void SeedData(ModelBuilder builder)
         {
-            Head = 1,
-            Hand = 1,
-            Foot = 1,
-            Necklace = 1,
-            Chest = 1,
-            Ring = 1
-        }
+            // Seed Ninja
+            builder.Entity<Ninja>().HasData(
+                new Ninja
+                {
+                    Name = "Erratic Ephemeron",
+                    Gold = 20,
+                    MaxHeadEquipment = 1,
+                    MaxHandEquipment = 1,
+                    MaxFeetEquipment = 1,
+                    MaxNecklaceEquipment = 1,
+                    MaxChestEquipment = 1,
+                    MaxRingEquipment = 1
+                }
+            );
 
-        public class Equipment
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public EquipmentType EquipmentType { get; set; }
+            // Seed Equipment matching the image
+            builder.Entity<Equipment>().HasData(
+                new Equipment
+                {
+                    Name = "Deze Petje", EquipmentType = EquipmentType.Head, MonetaryValue = 200, Strength = 5,
+                    Agility = 200, Intelligence = -200
+                },
+                new Equipment
+                {
+                    Name = "Spikey Gauntlets", EquipmentType = EquipmentType.Hand, MonetaryValue = 100,
+                    Strength = 10, Agility = 20, Intelligence = 0
+                },
+                new Equipment
+                {
+                    Name = "Daedric Boots", EquipmentType = EquipmentType.Foot, MonetaryValue = 150,
+                    Strength = 80, Agility = 5, Intelligence = 5
+                },
+                new Equipment
+                {
+                    Name = "Draugr Amulet", EquipmentType = EquipmentType.Necklace, MonetaryValue = 500,
+                    Strength = 5, Agility = -20, Intelligence = 50
+                },
+                new Equipment
+                {
+                    Name = "Daedric Armor", EquipmentType = EquipmentType.Chest, MonetaryValue = 1000,
+                    Strength = 150, Agility = -20, Intelligence = 45
+                },
+                new Equipment
+                {
+                    Name = "Wedding Band", EquipmentType = EquipmentType.Ring, MonetaryValue = 30, Strength = 0,
+                    Agility = 300, Intelligence = -150
+                }
+            );
 
-            public int MonetaryValue { get; set; }
-            public int Strength { get; set; }
-            public int Intelligence { get; set; }
-            public int Agility { get; set; }
-        
-            public ICollection<NinjaInventory> NinjaInventories { get; set; } = new List<NinjaInventory>();
+            // Seed NinjaInventory (linking table) to assign the equipment to the ninja
+            builder.Entity<NinjaInventory>().HasData(
+                new NinjaInventory
+                    { NinjaName = "Erratic Ephemeron", EquipmentName = "Deze Petje" },
+                new NinjaInventory
+                    { NinjaName = "Erratic Ephemeron", EquipmentName = "Spikey Gauntlets" },
+                new NinjaInventory
+                    { NinjaName = "Erratic Ephemeron", EquipmentName = "Daedric Boots" },
+                new NinjaInventory
+                    { NinjaName = "Erratic Ephemeron", EquipmentName = "Draugr Amulet" },
+                new NinjaInventory
+                    { NinjaName = "Erratic Ephemeron", EquipmentName = "Daedric Armor" },
+                new NinjaInventory
+                    { NinjaName = "Erratic Ephemeron", EquipmentName = "Wedding Band" }
+            );
         }
     }
+
+
+    public class Ninja
+    {
+        public string Name { get; set; }
+        public int Gold { get; set; }
+
+        public int MaxHeadEquipment { get; set; }
+        public int MaxHandEquipment { get; set; }
+        public int MaxFeetEquipment { get; set; }
+        public int MaxNecklaceEquipment { get; set; }
+        public int MaxChestEquipment { get; set; }
+        public int MaxRingEquipment { get; set; }
+        
+            
+        public ICollection<NinjaInventory> NinjaInventories { get; set; } = new List<NinjaInventory>();
+    }
+
+    public class NinjaInventory
+    {
+        public Ninja Ninja { get; set; }
+        public Equipment Equipment { get; set; }
+
+        public string NinjaName { get; set; }
+        public string EquipmentName { get; set; }
+    }
+    
+    public enum EquipmentType
+    {
+        Head,
+        Hand,
+        Foot,
+        Necklace,
+        Chest,
+        Ring
+    }
+
+    public class Equipment
+    {
+        // Set Name as the primary key
+        public string Name { get; set; }
+
+        public EquipmentType EquipmentType { get; set; }
+        public int MonetaryValue { get; set; }
+        public int Strength { get; set; }
+        public int Intelligence { get; set; }
+        public int Agility { get; set; }
+
+        public ICollection<NinjaInventory> NinjaInventories { get; set; } = new List<NinjaInventory>();
+    }
+
+}
