@@ -1,0 +1,72 @@
+﻿@model IEnumerable<PROG5_NinjaManager.Equipment>
+@{
+    ViewData["Title"] = "Shop";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<div class="page-header">
+    <div class="container h-100 d-flex align-items-center justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
+                <li class="breadcrumb-item mb-0 active" aria-current="page">Ninja List</li>
+            </ol>
+        </nav>
+
+        <div>
+            <a asp-action="CreateNinja" class="btn btn-primary">Create Ninja</a>
+        </div>
+    </div>
+</div>
+
+<div class="border-top"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between pb-3">
+        <h1 class="fs-3 fw-bold">Ninja Overview</h1>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered bg-white">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Equipment type</th>
+                    <th>MonetaryValue</th>
+                    <th>Strength</th>
+                    <th>Intelligence</th>
+                    <th>Agility</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var equipment in Model)
+                {
+                    <tr>
+                        <td>@equipment.Name</td>
+                        <td>@equipment.EquipmentType</td>
+                        <td>@equipment.MonetaryValue</td>
+                        <td>@equipment.Strength</td>
+                        <td>@equipment.Intelligence</td>
+                        <td>@equipment.Agility</td>
+                        <td class="text-end">
+                            <a asp-action="EditNinja" asp-route-name="@equipment.Name" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-action="DeleteNinja" asp-route-name="@equipment.Name" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    /* Optional styling to enhance the appearance */
+    .page-header {
+        padding: 20px 0;
+    }
+    .border-top {
+        border-top: 1px solid #e9ecef;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+    }
+</style>

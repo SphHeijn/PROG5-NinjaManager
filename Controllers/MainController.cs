@@ -20,4 +20,9 @@ public class MainController : Controller
     {
         return View(_context.Ninjas.ToList());
     }
+
+    public IActionResult Shop()
+    {
+        return View(_context.Equipments.ToList());
+    }
 }
