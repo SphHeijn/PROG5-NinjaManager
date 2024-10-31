@@ -1,13 +1,12 @@
 <!-- Views/Shared/_Sidebar.cshtml -->
 <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100" style="width: 280px;">
-    <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none" href="/Home">
-        <img src="favicon.ico"/>
+    <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none" asp-action="/Main/NinjaList">
+        <img class="w-25" src="~/Images/Ninja.png"/>
         <span>Ninja Manager</span>
     </a>
     <hr/>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item"><a class="nav-link text-white" href="/Home">Home</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="/NinjaList">Ninja's</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="/Shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link text-white active" asp-action="NinjaList">Ninja's</a></li>
+        <li class="nav-item"><a class="nav-link text-white" asp-action="Shop">Shop</a></li>
     </ul>
 </div>
