@@ -21,8 +21,18 @@ public class MainController : Controller
         return View(_context.Ninjas.ToList());
     }
 
-    public IActionResult Shop()
+    public IActionResult Shop(string? filterType = null)
     {
-        return View(_context.Equipments.ToList());
+        var equipment = _context.Equipments.AsEnumerable(); // Retrieve data from database first
+
+        if (!string.IsNullOrEmpty(filterType))
+        {
+            // Perform filtering in memory
+            equipment = equipment.Where(e => e.EquipmentType.ToString() == filterType);
+        }
+
+        ViewBag.FilterType = filterType; // Pass selected filter to the view
+        return View(equipment.ToList());
     }
+
 }
