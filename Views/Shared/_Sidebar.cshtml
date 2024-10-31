@@ -6,7 +6,7 @@
     </a>
     <hr/>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item"><a class="nav-link text-white active" asp-action="NinjaList">Ninja's</a></li>
-        <li class="nav-item"><a class="nav-link text-white" asp-action="Shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link text-white @(ViewContext.RouteData.Values["action"]?.ToString() == "NinjaList" ? "active" : "")" asp-action="NinjaList">Ninja's</a></li>
+        <li class="nav-item"><a class="nav-link text-white @(ViewContext.RouteData.Values["action"]?.ToString() == "Shop" ? "active" : "")" asp-action="Shop">Shop</a></li>
     </ul>
 </div>
