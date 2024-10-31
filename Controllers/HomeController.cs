@@ -16,8 +16,7 @@ namespace PROG5_NinjaManager.Controllers
 
         public IActionResult Index()
         {
-            var ninjas = _context.Ninjas.Include(n => n.Weapons).ToList();
-            return View(ninjas);
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
