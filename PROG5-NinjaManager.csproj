@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Views\NinjaList\" />
+    <Folder Include="Views\Shop\" />
   </ItemGroup>
 
 </Project>
