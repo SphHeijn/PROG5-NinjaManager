@@ -2,15 +2,12 @@
 @{
     ViewData["Title"] = "Ninja List";
 }
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
 <div class="page-header">
-    <div class="container h-100 d-flex align-items-center justify-content-between bg-light rounded-0">
+    <div class="container h-100 d-flex align-items-center justify-content-between">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item mb-0">
-                    <a asp-action="Index">Home</a>
-                </li>
+            <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
                 <li class="breadcrumb-item mb-0 active" aria-current="page">Ninja List</li>
             </ol>
         </nav>
@@ -44,7 +41,7 @@
                         <td>@ninja.Name</td>
                         <td>@ninja.Gold</td>
                         <td class="text-end">
-                            <a asp-action="EditNinja" asp-route-name="@ninja.Name" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="EditNinja" asp-route-name="@ninja.Name" class="btn btn-primary btn-sm">Edit</a>
                             <a asp-action="DeleteNinja" asp-route-name="@ninja.Name" class="btn btn-danger btn-sm">Delete</a>
                         </td>
                     </tr>
