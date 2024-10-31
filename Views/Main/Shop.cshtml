@@ -1,6 +1,19 @@
 ﻿@model IEnumerable<PROG5_NinjaManager.Equipment>
 @{
     ViewData["Title"] = "Shop";
+    var filterType = ViewBag.FilterType as string;
+
+    // Set the heading based on the filter type
+    var heading = filterType switch
+    {
+        "Head" => "Head Equipment",
+        "Hand" => "Hand Equipment",
+        "Foot" => "Foot Equipment",
+        "Necklace" => "Necklace Equipment",
+        "Chest" => "Chest Equipment",
+        "Ring" => "Ring Equipment",
+        _ => "All Equipment"
+    };
 }
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
@@ -12,9 +25,6 @@
             </ol>
         </nav>
 
-        <div>
-            <a asp-action="CreateNinja" class="btn btn-primary">Create Ninja</a>
-        </div>
     </div>
 </div>
 
@@ -22,7 +32,8 @@
 
 <div class="container my-4">
     <div class="d-flex justify-content-between pb-3">
-        <h1 class="fs-3 fw-bold">Ninja Overview</h1>
+        
+        <h1 class="fs-3 fw-bold">@heading</h1>
     </div>
 
     <div class="table-responsive">
