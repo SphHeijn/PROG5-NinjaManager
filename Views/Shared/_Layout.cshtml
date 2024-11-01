@@ -11,5 +11,16 @@
 
 
 <script src="~/js/site.js" asp-append-version="true"></script>
+<style>
+    .page-header {
+        padding: 20px 0;
+    }
+    .border-top {
+        border-top: 1px solid #e9ecef;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+    }
+</style>
 @await RenderSectionAsync("Scripts", required: false)
 </html>

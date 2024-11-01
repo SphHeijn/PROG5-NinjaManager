@@ -16,9 +16,24 @@ public class MainController : Controller
         return RedirectToAction("NinjaList");
     }
 
+    [Route("NinjaList")]
     public IActionResult NinjaList()
     {
         return View(_context.Ninjas.ToList());
+    }
+
+    [Route("NinjaList/NinjaView/{ninjaName}")]
+    public IActionResult NinjaView(string ninjaName)
+    {
+        var ninja = _context.Ninjas
+            .FirstOrDefault(n => n.Name == ninjaName);
+
+        if (ninja == null)
+        {
+            return RedirectToAction("NinjaList");
+        }
+
+        return View(ninja);
     }
 
     public IActionResult Shop(string? filterType = null)

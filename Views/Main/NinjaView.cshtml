@@ -1,0 +1,118 @@
+﻿@model Ninja
+@{
+    ViewData["Title"] = "Ninja Equipment Slots";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+
+<div class="page-header">
+    <div class="container h-100 d-flex align-items-center justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
+                <li class="breadcrumb-item mb-0">
+                    <a asp-action="NinjaList" class="fw-bold text-black">Ninja List</a>
+                </li>
+                <li class="breadcrumb-item mb-0 active" aria-current="page">Ninja View</li>
+            </ol>
+        </nav>
+
+        <h2 class="text-center my-auto">@Model.Name's Equipment</h2>
+        <p class="text-right my-auto">Gold: @Model.Gold</p>
+    </div>
+</div>
+
+<div class="border-top"></div>
+<table class="table table-bordered w-100 h-100">
+    <tbody>
+    <tr>
+        <td>
+            Head
+            @for (int i = 0; i < Model.MaxHeadEquipment; i++)
+            {
+                var equipment = Model.NinjaInventories
+                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Head)
+                    .Skip(i)
+                    .FirstOrDefault()?.Equipment;
+
+                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
+                    @(equipment?.Name ?? "Empty")
+                </button>
+            }
+        </td>
+        <td>
+            Necklace
+            @for (int i = 0; i < Model.MaxNecklaceEquipment; i++)
+            {
+                var equipment = Model.NinjaInventories
+                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Necklace)
+                    .Skip(i)
+                    .FirstOrDefault()?.Equipment;
+
+                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
+                    @(equipment?.Name ?? "Empty")
+                </button>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Hands
+            @for (int i = 0; i < Model.MaxHandEquipment; i++)
+            {
+                var equipment = Model.NinjaInventories
+                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Hand)
+                    .Skip(i)
+                    .FirstOrDefault()?.Equipment;
+
+                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
+                    @(equipment?.Name ?? "Empty")
+                </button>
+            }
+        </td>
+        <td>
+            Chest
+            @for (int i = 0; i < Model.MaxChestEquipment; i++)
+            {
+                var equipment = Model.NinjaInventories
+                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Chest)
+                    .Skip(i)
+                    .FirstOrDefault()?.Equipment;
+
+                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
+                    @(equipment?.Name ?? "Empty")
+                </button>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Feet
+            @for (int i = 0; i < Model.MaxFeetEquipment; i++)
+            {
+                var equipment = Model.NinjaInventories
+                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Foot)
+                    .Skip(i)
+                    .FirstOrDefault()?.Equipment;
+
+                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
+                    @(equipment?.Name ?? "Empty")
+                </button>
+            }
+        </td>
+        <td>
+            Ring
+            @for (int i = 0; i < Model.MaxRingEquipment; i++)
+            {
+                var equipment = Model.NinjaInventories
+                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Ring)
+                    .Skip(i)
+                    .FirstOrDefault()?.Equipment;
+
+                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
+                    @(equipment?.Name ?? "Empty")
+                </button>
+            }
+        </td>
+    </tr>
+    </tbody>
+</table>
