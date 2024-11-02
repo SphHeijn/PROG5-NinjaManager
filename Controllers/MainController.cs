@@ -41,24 +41,17 @@ public class MainController : Controller
     }
 
     [Route("Shop")]
-    public IActionResult Shop(string? equipmentType = null)
+    public IActionResult Shop()
     {
-        IEnumerable<Equipment> equipments = _context.Equipments.AsEnumerable(); // Retrieve data from database first
-
-        if (!string.IsNullOrEmpty(equipmentType))
-        {
-            // Perform filtering in memory
-            equipments = equipments.Where(e => e.EquipmentType.ToString() == equipmentType);
-        }
-
-        
-        return View(new ShopViewModel(equipments, equipmentType));
+        IEnumerable<Equipment> equipments = _context.Equipments.AsEnumerable();
+        return View(new ShopViewModel(equipments));
     }
 
     [Route("NinjaList/NinjaView/{ninjaName}/Shop/Type/{equipmentType}")]
     public IActionResult Shop(string ninjaName, string equipmentType)
     {
         var equipments = _context.Equipments.AsEnumerable(); // Retrieve data from database first
+        var ninja = _context.Ninjas.FirstOrDefault(n => n.Name == ninjaName);
 
         if (!string.IsNullOrEmpty(equipmentType))
         {
@@ -68,7 +61,7 @@ public class MainController : Controller
 
         ViewBag.FilterType = equipmentType; // Pass selected filter to the view
         
-        return View(new ShopViewModel(equipments, equipmentType));
+        return View(new ShopViewModel(equipments, ninja, equipmentType));
     }
 
     [Route("Shop/Equipment/{equipmentName?}")]
@@ -77,7 +70,16 @@ public class MainController : Controller
         Equipment? equipment = _context.Equipments.Include(n => n.NinjaInventories) // Load NinjaInventories collection
             .ThenInclude(ni => ni.Ninja).FirstOrDefault(e => e.Name == equipmentName);
         ViewData["IsEditMode"] = equipment != null;
-        return View("CreateOrEditEquipment", equipment ?? new Equipment());
+        return View("CreateOrEditEquipment", new CreateOrEditEquipmentViewModel(equipment ?? new Equipment()));
+    }
+    
+    [Route("NinjaList/NinjaView/{ninjaName}/Shop/Type/{equipmentTypeString}/Equipment/")]
+    public IActionResult EditEquipment(string ninjaName, string equipmentTypeString)
+    {
+        ViewData["IsEditMode"] = false;
+        Ninja? ninja = _context.Ninjas.FirstOrDefault(n => n.Name == ninjaName);
+        EquipmentType equipmentType = (EquipmentType)Enum.Parse(typeof(EquipmentType), equipmentTypeString);
+        return View("CreateOrEditEquipment", new CreateOrEditEquipmentViewModel(ninja, new Equipment(), equipmentType));
     }
 
     public IActionResult UpdateEquipment(Equipment equipment)
@@ -85,7 +87,7 @@ public class MainController : Controller
         if (!ModelState.IsValid)
         {
             ViewData["IsEditMode"] = true;
-            return View("CreateOrEditEquipment", equipment);
+            return View("CreateOrEditEquipment", new CreateOrEditEquipmentViewModel(equipment));
         }
 
         // Update logic here
@@ -123,8 +125,9 @@ public class MainController : Controller
         return RedirectToAction("Shop");
     }
 
-    public IActionResult SaveEquipment(Equipment equipment)
+    public IActionResult SaveEquipment(CreateOrEditEquipmentViewModel viewModel)
     {
+        Equipment equipment = viewModel.Equipment;
         // Check for empty or invalid fields and add error messages to ModelState
         if (string.IsNullOrEmpty(equipment.Name))
         {
@@ -158,12 +161,12 @@ public class MainController : Controller
         // If there are validation errors, return to the form view with validation messages
         if (!ModelState.IsValid)
         {
-            return View("CreateOrEditEquipment", equipment);
+            return View("CreateOrEditEquipment", new CreateOrEditEquipmentViewModel(viewModel.Ninja, equipment, viewModel.EquipmentType));
         }
 
         // If all validation passes, save equipment and redirect to Shop
         _context.Equipments.Add(equipment);
         _context.SaveChanges();
-        return RedirectToAction("Shop");
+        return RedirectToAction("Shop", new { ninjaName = viewModel.Ninja?.Name, equipmentType = viewModel.EquipmentType});
     }
 }

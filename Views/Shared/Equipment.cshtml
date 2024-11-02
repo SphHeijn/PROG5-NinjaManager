@@ -1,10 +1,6 @@
 ﻿@model PROG5_NinjaManager.Models.EquipmentViewModel
 
-<a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2" style="text-align: left" asp-action="@(Model.Equipment == null ? "Shop" : "EditEquipment")"
-   asp-route-ninjaName="@(Model.Ninja.Name)"
-   asp-route-equipmentType="@(Model.Equipment == null ? Model.EquipmentType : null)"
-   asp-route-equipmentName="@(Model.Equipment?.Name ?? null)"
-   )>
+<a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2" style="text-align: left" asp-action="Shop" asp-route-ninjaName="@(Model.Ninja.Name)" asp-route-equipmentType="@(Model.EquipmentType)">
     
 
     <div class="equipment-name fw-bold mb-1">
