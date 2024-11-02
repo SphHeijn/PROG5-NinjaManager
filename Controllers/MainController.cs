@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PROG5_NinjaManager.Models;
 
 namespace PROG5_NinjaManager.Controllers;
 
@@ -27,38 +28,54 @@ public class MainController : Controller
     public IActionResult NinjaView(string ninjaName)
     {
         var ninja = _context.Ninjas
-            .Include(n => n.NinjaInventories)               // Load NinjaInventories collection
-                .ThenInclude(ni => ni.Equipment)
+            .Include(n => n.NinjaInventories) // Load NinjaInventories collection
+            .ThenInclude(ni => ni.Equipment)
             .FirstOrDefault(n => n.Name == ninjaName);
 
         if (ninja == null)
         {
             return RedirectToAction("NinjaList");
         }
+
         return View(ninja);
     }
 
-    public IActionResult Shop(string? filterType = null)
+    [Route("Shop")]
+    public IActionResult Shop(string? equipmentType = null)
     {
-        var equipment = _context.Equipments.AsEnumerable(); // Retrieve data from database first
+        IEnumerable<Equipment> equipments = _context.Equipments.AsEnumerable(); // Retrieve data from database first
 
-        if (!string.IsNullOrEmpty(filterType))
+        if (!string.IsNullOrEmpty(equipmentType))
         {
             // Perform filtering in memory
-            equipment = equipment.Where(e => e.EquipmentType.ToString() == filterType);
+            equipments = equipments.Where(e => e.EquipmentType.ToString() == equipmentType);
         }
-    
-        ViewBag.FilterType = filterType; // Pass selected filter to the view
-        return View(equipment.ToList());
+
+        
+        return View(new ShopViewModel(equipments, equipmentType));
     }
 
-    public IActionResult CreateEquipment()
+    [Route("NinjaList/NinjaView/{ninjaName}/Shop/Type/{equipmentType}")]
+    public IActionResult Shop(string ninjaName, string equipmentType)
     {
-        return RedirectToAction("EditEquipment");
+        var equipments = _context.Equipments.AsEnumerable(); // Retrieve data from database first
+
+        if (!string.IsNullOrEmpty(equipmentType))
+        {
+            // Perform filtering in memory
+            equipments = equipments.Where(e => e.EquipmentType.ToString() == equipmentType);
+        }
+
+        ViewBag.FilterType = equipmentType; // Pass selected filter to the view
+        
+        return View(new ShopViewModel(equipments, equipmentType));
     }
+
+    [Route("Shop/Equipment/{equipmentName?}")]
     public IActionResult EditEquipment(string equipmentName)
     {
-        var equipment = _context.Equipments.FirstOrDefault(e => e.Name == equipmentName);
+        Equipment? equipment = _context.Equipments.Include(n => n.NinjaInventories) // Load NinjaInventories collection
+            .ThenInclude(ni => ni.Ninja).FirstOrDefault(e => e.Name == equipmentName);
         ViewData["IsEditMode"] = equipment != null;
         return View("CreateOrEditEquipment", equipment ?? new Equipment());
     }
@@ -70,7 +87,7 @@ public class MainController : Controller
             ViewData["IsEditMode"] = true;
             return View("CreateOrEditEquipment", equipment);
         }
-    
+
         // Update logic here
         var existingEquipment = _context.Equipments.FirstOrDefault(e => e.Name == equipment.Name);
         if (existingEquipment != null)
@@ -84,7 +101,25 @@ public class MainController : Controller
 
             _context.SaveChanges();
         }
-    
+
+        return RedirectToAction("Shop");
+    }
+
+    [Route("/Shop/Delete/{equipmentName}")]
+    public IActionResult DeleteEquipment(string equipmentName)
+    {
+        var equipment = _context.Equipments.FirstOrDefault(e => e.Name == equipmentName);
+
+        if (equipment != null)
+        {
+            var inventoriesToRemove = _context.NinjaInventories.Where(ni => ni.EquipmentName == equipmentName);
+            _context.NinjaInventories.RemoveRange(inventoriesToRemove);
+            
+            _context.Equipments.Remove(equipment);
+            _context.SaveChanges();
+        }
+
+        // Redirect to the "Shop" page
         return RedirectToAction("Shop");
     }
 

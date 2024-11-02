@@ -1,10 +1,9 @@
-﻿@model IEnumerable<PROG5_NinjaManager.Equipment>
+﻿@model PROG5_NinjaManager.Models.ShopViewModel
 @{
     ViewData["Title"] = "Shop";
-    var filterType = ViewBag.FilterType as string;
 
     // Set the heading based on the filter type
-    var heading = filterType switch
+    var heading = Model.FilterType switch
     {
         "Head" => "Head Equipment",
         "Hand" => "Hand Equipment",
@@ -26,7 +25,7 @@
         </nav>
         
         <div>
-            <a asp-action="CreateEquipment" class="btn btn-primary">Create Equipment</a>
+            <a asp-action="EditEquipment" class="btn btn-primary">Create Equipment</a>
         </div>
     </div>
 </div>
@@ -52,7 +51,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var equipment in Model)
+                @foreach (var equipment in Model.Equipments)
                 {
                     <tr>
                         <td>@equipment.Name</td>
@@ -62,7 +61,7 @@
                         <td>@equipment.Intelligence</td>
                         <td>@equipment.Agility</td>
                         <td class="text-end">
-                            @if (!string.IsNullOrEmpty(filterType))
+                            @if (!string.IsNullOrEmpty(Model.FilterType))
                             {
                                 <a asp-action="Buy" asp-route-equipmentName="@equipment.Name" class="btn btn-success btn-sm">Buy</a>
                             }

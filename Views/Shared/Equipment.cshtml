@@ -1,37 +1,45 @@
-﻿@model Equipment
+﻿@model PROG5_NinjaManager.Models.EquipmentViewModel
 
-<div class="equipment-item align-items-center p-2 mb-2 equipment rounded equipment-details m-2" style="text-align: left">
+<a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2" style="text-align: left" asp-action="@(Model.Equipment == null ? "Shop" : "EditEquipment")"
+   asp-route-ninjaName="@(Model.Ninja.Name)"
+   asp-route-equipmentType="@(Model.Equipment == null ? Model.EquipmentType : null)"
+   asp-route-equipmentName="@(Model.Equipment?.Name ?? null)"
+   )>
+    
+
     <div class="equipment-name fw-bold mb-1">
-        @(Model?.Name ?? "Empty")
+        @(Model.Equipment?.Name ?? "Empty")
     </div>
-    @if (Model != null)
+    @if (Model.Equipment != null)
     {
         <div class="equipment-stats text-muted small w-100">
-            <div>💰 Value: @Model.MonetaryValue</div>
-            <div>💪 Strength: @Model.Strength</div>
-            <div>🧠 Intelligence: @Model.Intelligence</div>
-            <div>🏃 Agility: @Model.Agility</div>
+            <div>💰 Value: @Model.Equipment.MonetaryValue</div>
+            <div>💪 Strength: @Model.Equipment.Strength</div>
+            <div>🧠 Intelligence: @Model.Equipment.Intelligence</div>
+            <div>🏃 Agility: @Model.Equipment.Agility</div>
         </div>
     }
     else
     {
         <div class="equipment-stats text-muted small">No Equipment</div>
     }
-</div>
+</a>
 
 <style>
-.equipment {
-    border: 2px solid black;
-    width: fit-content;
-}
 
 .equipment-item {
+    text-decoration: none;
+    user-select: none;
+    border: 2px solid black;
     background-color: #f8f9fa;
     width: 150px;
     height: 130px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+.equipment-item:hover {
+    background-color: #bcbebf;
 }
 
 .equipment-details .equipment-name {

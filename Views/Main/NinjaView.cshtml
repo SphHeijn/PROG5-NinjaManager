@@ -1,4 +1,5 @@
-﻿@model Ninja
+﻿@using PROG5_NinjaManager.Models
+@model Ninja
 @{
     ViewData["Title"] = "Ninja Equipment Slots";
 
@@ -51,10 +52,10 @@
             <div class="d-flex flex-row flex-wrap justify-content-start">
                 @for (int i = 0; i < Model.MaxHeadEquipment; i++)
                 {
-                    var equipment = Model.NinjaInventories
+                    EquipmentViewModel equipment = new EquipmentViewModel(Model, Model.NinjaInventories
                         .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Head)
                         .Skip(i)
-                        .FirstOrDefault()?.Equipment;
+                        .FirstOrDefault()?.Equipment, EquipmentType.Head);
 
                     @Html.Partial("Equipment", equipment)
                 }
@@ -65,10 +66,10 @@
             <div class="d-flex flex-row flex-wrap justify-content-end">
                 @for (int i = 0; i < Model.MaxNecklaceEquipment; i++)
                 {
-                    var equipment = Model.NinjaInventories
+                    EquipmentViewModel equipment = new EquipmentViewModel(Model, Model.NinjaInventories
                         .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Necklace)
                         .Skip(i)
-                        .FirstOrDefault()?.Equipment;
+                        .FirstOrDefault()?.Equipment, EquipmentType.Necklace);
 
                     @Html.Partial("Equipment", equipment)
                 }
@@ -81,10 +82,10 @@
             <div class="d-flex flex-row flex-wrap justify-content-start">
                 @for (int i = 0; i < Model.MaxHandEquipment; i++)
                 {
-                    var equipment = Model.NinjaInventories
+                    EquipmentViewModel equipment = new EquipmentViewModel(Model, Model.NinjaInventories
                         .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Hand)
                         .Skip(i)
-                        .FirstOrDefault()?.Equipment;
+                        .FirstOrDefault()?.Equipment, EquipmentType.Hand);
 
                     @Html.Partial("Equipment", equipment)
                 }
@@ -95,10 +96,10 @@
             <div class="d-flex flex-row flex-wrap justify-content-end">
                 @for (int i = 0; i < Model.MaxChestEquipment; i++)
                 {
-                    var equipment = Model.NinjaInventories
+                    EquipmentViewModel equipment = new EquipmentViewModel(Model, Model.NinjaInventories
                         .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Chest)
                         .Skip(i)
-                        .FirstOrDefault()?.Equipment;
+                        .FirstOrDefault()?.Equipment, EquipmentType.Chest);
 
                     @Html.Partial("Equipment", equipment)
                 }
@@ -111,10 +112,10 @@
             <div class="d-flex flex-row flex-wrap justify-content-start">
                 @for (int i = 0; i < Model.MaxFeetEquipment; i++)
                 {
-                    var equipment = Model.NinjaInventories
+                    EquipmentViewModel equipment = new EquipmentViewModel(Model, Model.NinjaInventories
                         .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Foot)
                         .Skip(i)
-                        .FirstOrDefault()?.Equipment;
+                        .FirstOrDefault()?.Equipment, EquipmentType.Foot);
 
                     @Html.Partial("Equipment", equipment)
                 }
@@ -125,10 +126,10 @@
             <div class="d-flex flex-row flex-wrap justify-content-end">
                 @for (int i = 0; i < Model.MaxRingEquipment; i++)
                 {
-                    var equipment = Model.NinjaInventories
+                    EquipmentViewModel equipment = new EquipmentViewModel(Model, Model.NinjaInventories
                         .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Ring)
                         .Skip(i)
-                        .FirstOrDefault()?.Equipment;
+                        .FirstOrDefault()?.Equipment, EquipmentType.Ring);
 
                     @Html.Partial("Equipment", equipment)
                 }

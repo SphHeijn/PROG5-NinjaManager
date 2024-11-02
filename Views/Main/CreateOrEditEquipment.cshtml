@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = ViewData["IsEditMode"] as bool? == true ? "Edit Equipment" : "Create Equipment";
 }
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
 
 <div class="page-header">
     <div class="container h-100 d-flex align-items-center justify-content-between">
@@ -18,15 +18,22 @@
 <div class="border-top"></div>
 
 <div class="container my-4">
-    
+
     <div class="d-flex justify-content-between pb-3">
         <h1 class="fs-3 fw-bold">@ViewData["Title"]</h1>
     </div>
-    
+
     <form asp-action="@(ViewData["IsEditMode"] as bool? == true ? "UpdateEquipment" : "SaveEquipment")" method="post">
         <div class="form-group m-2">
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" @(ViewData["Title"] as string == "IsEditMode" ? "readonly" : "")/>
+            @if (ViewData["IsEditMode"] as bool? == true)
+            {
+                <input asp-for="Name" class="form-control" readonly="readonly"/>
+            }
+            else
+            {
+                <input asp-for="Name" class="form-control"/>
+            }
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
@@ -45,7 +52,7 @@
 
         <!-- Same input fields as before -->
         <div class="form-group m-2">
-            <label asp-for="MonetaryValue" class="control-label">test</label>
+            <label asp-for="MonetaryValue" class="control-label">Cost</label>
             <input asp-for="MonetaryValue" class="form-control"/>
             <span asp-validation-for="MonetaryValue" class="text-danger"></span>
         </div>
@@ -66,8 +73,13 @@
         </div>
 
         <!-- Submit button with dynamic text based on action -->
-        <div class="form-group m-2">
-            <input type="submit" value="@(ViewData["IsEditMode"] as bool? == true ? "Update" : "Create")" class="btn btn-primary"/>
+        <div class="d-flex flex-row justify-content-between">
+            <div class="form-group m-2">
+                <a href="#" onclick="return confirmDelete('@Model.Name', '@Model.NinjaInventories.Count');" class="btn btn-danger">Delete</a>
+            </div>
+            <div class="form-group m-2 ml-auto">
+                <input type="submit" value="@(ViewData["IsEditMode"] as bool? == true ? "Update" : "Create")" class="btn btn-primary"/>
+            </div>
         </div>
     </form>
 </div>
@@ -83,3 +95,11 @@
         vertical-align: middle;
     }
 </style>
+
+<script>
+    function confirmDelete(equipmentName, ninjasAffected) {
+        if (confirm(`Are you sure you want to delete the equipment: ${equipmentName}? ${ninjasAffected} ninja(s) have this item equipped.`)) {
+            window.location.href = '/Shop/Delete/' + encodeURIComponent(equipmentName);
+        }
+    }
+</script>
