@@ -9,13 +9,13 @@
         @if (Model.Ninja == null)
         {
             <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
-                <li class="breadcrumb-item mb-0">
-                    <a asp-action="Shop" class="fw-bold text-black">Shop</a>
-                </li>
-                <li class="breadcrumb-item mb-0 active" aria-current="page">Edit Equipment</li>
-            </ol>
-        </nav>
+                <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
+                    <li class="breadcrumb-item mb-0">
+                        <a asp-action="Shop" class="fw-bold text-black">Shop</a>
+                    </li>
+                    <li class="breadcrumb-item mb-0 active" aria-current="page">Edit Equipment</li>
+                </ol>
+            </nav>
         }
         else
         {
@@ -28,7 +28,7 @@
                         <a asp-action="NinjaView" asp-route-ninjaName="@Model.Ninja.Name" class="fw-bold text-black">Ninja View</a>
                     </li>
                     <li class="breadcrumb-item mb-0">
-                        <a asp-action="Shop" class="fw-bold text-black">Shop</a>
+                        <a asp-action="Shop" asp-route-ninjaName="@Model.Ninja.Name" asp-route-equipmentType="@Model.EquipmentType" class="fw-bold text-black">Shop</a>
                     </li>
                     <li class="breadcrumb-item mb-0 active" aria-current="page">Edit Equipment</li>
                 </ol>
@@ -47,9 +47,9 @@
     </div>
 
     <form asp-action="@(ViewData["IsEditMode"] as bool? == true ? "UpdateEquipment" : "SaveEquipment")" method="post">
-        <input type="hidden" asp-for="Ninja.Name" />
-        <input type="hidden" asp-for="EquipmentType" />
-        
+        <input type="hidden" asp-for="Ninja"/>
+        <input type="hidden" asp-for="EquipmentType"/>
+
         <div class="form-group m-2">
             <label asp-for="Equipment.Name" class="control-label"></label>
             @if (ViewData["IsEditMode"] as bool? == true)
@@ -63,24 +63,40 @@
             <span asp-validation-for="Equipment.Name" class="text-danger"></span>
         </div>
 
-        <div class="form-group m-2">
-            <label asp-for="Equipment.EquipmentType" class="control-label"></label>
-            <select asp-for="Equipment.EquipmentType" class="form-control">
-                <option value="Head">Head</option>
-                <option value="Hand">Hand</option>
-                <option value="Foot">Foot</option>
-                <option value="Necklace">Necklace</option>
-                <option value="Chest">Chest</option>
-                <option value="Ring">Ring</option>
-            </select>
-            <span asp-validation-for="Equipment.EquipmentType" class="text-danger"></span>
-        </div>
+        @if (Model.EquipmentType == null)
+        {
+            <div class="form-group m-2">
+                <label asp-for="Equipment.EquipmentType" class="control-label"></label>
+                <select asp-for="Equipment.EquipmentType" class="form-control">
+                    <option value="Head">Head</option>
+                    <option value="Hand">Hand</option>
+                    <option value="Foot">Foot</option>
+                    <option value="Necklace">Necklace</option>
+                    <option value="Chest">Chest</option>
+                    <option value="Ring">Ring</option>
+                </select>
+                <span asp-validation-for="Equipment.EquipmentType" class="text-danger"></span>
+            </div>
+        }
+        else
+        {
+            <div class="form-group m-2">
+                <label asp-for="Equipment.EquipmentType" class="control-label"></label>
+                <select asp-for="Equipment.EquipmentType" class="form-control" disabled>
+                    <option value="@Model.EquipmentType.ToString()" selected>@Model.EquipmentType.ToString()</option>
+                </select>
+                <span asp-validation-for="Equipment.EquipmentType" class="text-danger"></span>
+                <input type="hidden" asp-for="Equipment.EquipmentType" value="@Model.EquipmentType.ToString()"/>
+            </div>
+        }
+
 
         <!-- Same input fields as before -->
         <div class="form-group m-2">
             <label asp-for="Equipment.MonetaryValue" class="control-label">Cost</label>
             <input asp-for="Equipment.MonetaryValue" class="form-control"/>
             <span asp-validation-for="Equipment.MonetaryValue" class="text-danger"></span>
+            
         </div>
         <div class="form-group m-2">
             <label asp-for="Equipment.Strength" class="control-label"></label>
@@ -97,8 +113,7 @@
             <input asp-for="Equipment.Agility" class="form-control"/>
             <span asp-validation-for="Equipment.Agility" class="text-danger"></span>
         </div>
-
-        <!-- Submit button with dynamic text based on action -->
+        
         <div class="d-flex flex-row justify-content-between">
             @if (ViewData["IsEditMode"] as bool? == true)
             {

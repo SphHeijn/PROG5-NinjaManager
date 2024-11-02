@@ -131,31 +131,31 @@ public class MainController : Controller
         // Check for empty or invalid fields and add error messages to ModelState
         if (string.IsNullOrEmpty(equipment.Name))
         {
-            ModelState.AddModelError("Name", "Name is required.");
+            ModelState.AddModelError("Equipment.Name", "Name is required.");
         }
         else if (_context.Equipments.Any(e => e.Name == equipment.Name))
         {
-            ModelState.AddModelError("Name", "An equipment with this name already exists.");
+            ModelState.AddModelError("Equipment.Name", "An equipment with this name already exists.");
         }
 
         if (equipment.MonetaryValue <= 0)
         {
-            ModelState.AddModelError("MonetaryValue", "Monetary value must be greater than zero.");
+            ModelState.AddModelError("Equipment.MonetaryValue", "Monetary value must be greater than zero.");
         }
 
         if (equipment.Strength < 0)
         {
-            ModelState.AddModelError("Strength", "Strength must be zero or a positive value.");
+            ModelState.AddModelError("Equipment.Strength", "Strength must be zero or a positive value.");
         }
 
         if (equipment.Intelligence < 0)
         {
-            ModelState.AddModelError("Intelligence", "Intelligence must be zero or a positive value.");
+            ModelState.AddModelError("Equipment.Intelligence", "Intelligence must be zero or a positive value.");
         }
 
         if (equipment.Agility < 0)
         {
-            ModelState.AddModelError("Agility", "Agility must be zero or a positive value.");
+            ModelState.AddModelError("Equipment.Agility", "Agility must be zero or a positive value.");
         }
 
         // If there are validation errors, return to the form view with validation messages
@@ -167,6 +167,11 @@ public class MainController : Controller
         // If all validation passes, save equipment and redirect to Shop
         _context.Equipments.Add(equipment);
         _context.SaveChanges();
+        if (viewModel.Ninja == null)
+        {
+            return RedirectToAction("Shop");
+        }
         return RedirectToAction("Shop", new { ninjaName = viewModel.Ninja?.Name, equipmentType = viewModel.EquipmentType});
+    
     }
 }
