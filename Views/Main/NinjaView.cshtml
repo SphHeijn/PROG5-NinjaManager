@@ -1,12 +1,21 @@
 ﻿@model Ninja
 @{
     ViewData["Title"] = "Ninja Equipment Slots";
+
+    // Calculate total gear value and stats
+    int totalGearValue = Model.NinjaInventories.Sum(inv => inv.Equipment.MonetaryValue);
+    int totalStrength = Model.NinjaInventories.Sum(inv => inv.Equipment.Strength);
+    int totalIntelligence = Model.NinjaInventories.Sum(inv => inv.Equipment.Intelligence);
+    int totalAgility = Model.NinjaInventories.Sum(inv => inv.Equipment.Agility);
+
+    // Calculate remaining gold
+    int remainingGold = Model.Gold - totalGearValue;
 }
 
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
 
-<div class="page-header">
-    <div class="container h-100 d-flex align-items-center justify-content-between">
+<div class="page-header p-0">
+    <div class="container h-100 d-flex align-items-center justify-content-between" style="padding: 20px 12px">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
                 <li class="breadcrumb-item mb-0">
@@ -16,8 +25,15 @@
             </ol>
         </nav>
 
-        <h2 class="text-center my-auto">@Model.Name's Equipment</h2>
-        <p class="text-right my-auto">Gold: @Model.Gold</p>
+        <h2 class="text-right my-0">@Model.Name's Equipment</h2>
+    </div>
+    <div class="border-top"></div>
+    <div class="container h-100 d-flex align-items-center justify-content-between p-3" style="padding: 20px 12px">
+        <p class="my-auto">💰 Gold in wallet: @remainingGold</p>
+        <p class="my-auto">💰 Gear value: @totalGearValue</p>
+        <p class="my-auto">💪 Total strength: @totalStrength</p>
+        <p class="my-auto">🧠 Total Intelligence: @totalIntelligence</p>
+        <p class="my-auto">🏃 Total Agility: @totalAgility</p>
     </div>
 </div>
 <div class="border-top"></div>
@@ -129,7 +145,7 @@
     
     table {
         width: 100%;
-        height: calc(100% - 81px);
+        height: calc(100% - 138px);
     }
     
     td {
