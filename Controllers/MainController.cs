@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace PROG5_NinjaManager.Controllers;
 
@@ -26,13 +27,14 @@ public class MainController : Controller
     public IActionResult NinjaView(string ninjaName)
     {
         var ninja = _context.Ninjas
+            .Include(n => n.NinjaInventories)               // Load NinjaInventories collection
+                .ThenInclude(ni => ni.Equipment)
             .FirstOrDefault(n => n.Name == ninjaName);
 
         if (ninja == null)
         {
             return RedirectToAction("NinjaList");
         }
-
         return View(ninja);
     }
 

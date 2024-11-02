@@ -20,99 +20,122 @@
         <p class="text-right my-auto">Gold: @Model.Gold</p>
     </div>
 </div>
-
 <div class="border-top"></div>
-<table class="table table-bordered w-100 h-100">
-    <tbody>
+
+<table class="table m-0" style="table-layout: fixed; width: 100%; 
+              background-image: url('@Url.Content("~/Images/Skyrim Concept Art.png")'); 
+              background-size: contain; 
+              background-repeat: no-repeat; 
+              background-position: center; 
+              border: none;">
+    <tbody class="w-100">
     <tr>
-        <td>
-            Head
-            @for (int i = 0; i < Model.MaxHeadEquipment; i++)
-            {
-                var equipment = Model.NinjaInventories
-                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Head)
-                    .Skip(i)
-                    .FirstOrDefault()?.Equipment;
+        <td style="vertical-align: top">
+            Head<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-start">
+                @for (int i = 0; i < Model.MaxHeadEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Head)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
 
-                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
-                    @(equipment?.Name ?? "Empty")
-                </button>
-            }
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
         </td>
-        <td>
-            Necklace
-            @for (int i = 0; i < Model.MaxNecklaceEquipment; i++)
-            {
-                var equipment = Model.NinjaInventories
-                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Necklace)
-                    .Skip(i)
-                    .FirstOrDefault()?.Equipment;
+        <td class="right" style="vertical-align: top">
+            Necklace<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-end">
+                @for (int i = 0; i < Model.MaxNecklaceEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Necklace)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
 
-                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
-                    @(equipment?.Name ?? "Empty")
-                </button>
-            }
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
         </td>
     </tr>
     <tr>
-        <td>
-            Hands
-            @for (int i = 0; i < Model.MaxHandEquipment; i++)
-            {
-                var equipment = Model.NinjaInventories
-                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Hand)
-                    .Skip(i)
-                    .FirstOrDefault()?.Equipment;
+        <td style="vertical-align: top">
+            Hands<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-start">
+                @for (int i = 0; i < Model.MaxHandEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Hand)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
 
-                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
-                    @(equipment?.Name ?? "Empty")
-                </button>
-            }
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
         </td>
-        <td>
-            Chest
-            @for (int i = 0; i < Model.MaxChestEquipment; i++)
-            {
-                var equipment = Model.NinjaInventories
-                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Chest)
-                    .Skip(i)
-                    .FirstOrDefault()?.Equipment;
+        <td class="right" style="vertical-align: top">
+            Chest<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-end">
+                @for (int i = 0; i < Model.MaxChestEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Chest)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
 
-                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
-                    @(equipment?.Name ?? "Empty")
-                </button>
-            }
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
         </td>
     </tr>
     <tr>
-        <td>
-            Feet
-            @for (int i = 0; i < Model.MaxFeetEquipment; i++)
-            {
-                var equipment = Model.NinjaInventories
-                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Foot)
-                    .Skip(i)
-                    .FirstOrDefault()?.Equipment;
+        <td style="vertical-align: top">
+            Feet<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-start">
+                @for (int i = 0; i < Model.MaxFeetEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Foot)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
 
-                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
-                    @(equipment?.Name ?? "Empty")
-                </button>
-            }
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
         </td>
-        <td>
-            Ring
-            @for (int i = 0; i < Model.MaxRingEquipment; i++)
-            {
-                var equipment = Model.NinjaInventories
-                    .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Ring)
-                    .Skip(i)
-                    .FirstOrDefault()?.Equipment;
+        <td class="right" style="vertical-align: top">
+            Ring<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-end">
+                @for (int i = 0; i < Model.MaxRingEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Ring)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
 
-                <button class="btn btn-sm btn-square mb-2 @(equipment != null ? "btn-secondary" : "btn-outline-primary")">
-                    @(equipment?.Name ?? "Empty")
-                </button>
-            }
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
         </td>
     </tr>
     </tbody>
 </table>
+
+<style>
+    .right {
+        text-align: right;
+    }
+    
+    table {
+        width: 100%;
+        height: calc(100% - 81px);
+    }
+    
+    td {
+        padding: 10px;
+    }
+    tbody, td, tfoot, th, thead, tr {
+        border-style: none;
+    }
+</style>
