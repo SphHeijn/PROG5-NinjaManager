@@ -1,0 +1,45 @@
+﻿@model Equipment
+
+<div class="equipment-item align-items-center p-2 mb-2 equipment rounded equipment-details m-2" style="text-align: left">
+    <div class="equipment-name fw-bold mb-1">
+        @(Model?.Name ?? "Empty")
+    </div>
+    @if (Model != null)
+    {
+        <div class="equipment-stats text-muted small w-100">
+            <div>💰 Value: @Model.MonetaryValue</div>
+            <div>💪 Strength: @Model.Strength</div>
+            <div>🧠 Intelligence: @Model.Intelligence</div>
+            <div>🏃 Agility: @Model.Agility</div>
+        </div>
+    }
+    else
+    {
+        <div class="equipment-stats text-muted small">No Equipment</div>
+    }
+</div>
+
+<style>
+.equipment {
+    border: 2px solid black;
+    width: fit-content;
+}
+
+.equipment-item {
+    background-color: #f8f9fa;
+    width: 150px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.equipment-details .equipment-name {
+    font-size: 1rem;
+    color: #333;
+}
+
+.equipment-details .equipment-stats div {
+    font-size: 0.85rem;
+}
+</style>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PROG5_NinjaManager.Ninja>
+﻿@model IEnumerable<Ninja>
 @{
     ViewData["Title"] = "Ninja List";
 }
@@ -40,9 +40,14 @@
                     <tr>
                         <td>@ninja.Name</td>
                         <td>@ninja.Gold</td>
-                        <td class="text-end">
-                            <a asp-action="EditNinja" asp-route-name="@ninja.Name" class="btn btn-primary btn-sm">Edit</a>
-                            <a asp-action="DeleteNinja" asp-route-name="@ninja.Name" class="btn btn-danger btn-sm">Delete</a>
+                        <td class="d-flex flex-row">
+                            <div class="text-start w-50">
+                                <a asp-action="NinjaView" asp-route-ninjaName="@ninja.Name" class="btn btn-primary btn-sm">View</a>
+                            </div>
+                            
+                            <div class="text-end w-50">
+                                <a asp-action="DeleteNinja" asp-route-ninjaName="@ninja.Name" class="btn btn-danger btn-sm">Delete</a>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -50,16 +55,3 @@
         </table>
     </div>
 </div>
-
-<style>
-    /* Optional styling to enhance the appearance */
-    .page-header {
-        padding: 20px 0;
-    }
-    .border-top {
-        border-top: 1px solid #e9ecef;
-    }
-    .table th, .table td {
-        vertical-align: middle;
-    }
-</style>

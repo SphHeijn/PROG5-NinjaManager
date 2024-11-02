@@ -1,0 +1,157 @@
+﻿@model Ninja
+@{
+    ViewData["Title"] = "Ninja Equipment Slots";
+
+    // Calculate total gear value and stats
+    int totalGearValue = Model.NinjaInventories.Sum(inv => inv.Equipment.MonetaryValue);
+    int totalStrength = Model.NinjaInventories.Sum(inv => inv.Equipment.Strength);
+    int totalIntelligence = Model.NinjaInventories.Sum(inv => inv.Equipment.Intelligence);
+    int totalAgility = Model.NinjaInventories.Sum(inv => inv.Equipment.Agility);
+
+    // Calculate remaining gold
+    int remainingGold = Model.Gold - totalGearValue;
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+
+<div class="page-header p-0">
+    <div class="container h-100 d-flex align-items-center justify-content-between" style="padding: 20px 12px">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
+                <li class="breadcrumb-item mb-0">
+                    <a asp-action="NinjaList" class="fw-bold text-black">Ninja List</a>
+                </li>
+                <li class="breadcrumb-item mb-0 active" aria-current="page">Ninja View</li>
+            </ol>
+        </nav>
+
+        <h2 class="text-right my-0">@Model.Name's Equipment</h2>
+    </div>
+    <div class="border-top"></div>
+    <div class="container h-100 d-flex align-items-center justify-content-between p-3" style="padding: 20px 12px">
+        <p class="my-auto">💰 Gold in wallet: @remainingGold</p>
+        <p class="my-auto">💰 Gear value: @totalGearValue</p>
+        <p class="my-auto">💪 Total strength: @totalStrength</p>
+        <p class="my-auto">🧠 Total Intelligence: @totalIntelligence</p>
+        <p class="my-auto">🏃 Total Agility: @totalAgility</p>
+    </div>
+</div>
+<div class="border-top"></div>
+
+<table class="table m-0" style="table-layout: fixed; width: 100%; 
+              background-image: url('@Url.Content("~/Images/Skyrim Concept Art.png")'); 
+              background-size: contain; 
+              background-repeat: no-repeat; 
+              background-position: center; 
+              border: none;">
+    <tbody class="w-100">
+    <tr>
+        <td style="vertical-align: top">
+            Head<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-start">
+                @for (int i = 0; i < Model.MaxHeadEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Head)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
+
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
+        </td>
+        <td class="right" style="vertical-align: top">
+            Necklace<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-end">
+                @for (int i = 0; i < Model.MaxNecklaceEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Necklace)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
+
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">
+            Hands<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-start">
+                @for (int i = 0; i < Model.MaxHandEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Hand)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
+
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
+        </td>
+        <td class="right" style="vertical-align: top">
+            Chest<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-end">
+                @for (int i = 0; i < Model.MaxChestEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Chest)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
+
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">
+            Feet<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-start">
+                @for (int i = 0; i < Model.MaxFeetEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Foot)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
+
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
+        </td>
+        <td class="right" style="vertical-align: top">
+            Ring<br/>
+            <div class="d-flex flex-row flex-wrap justify-content-end">
+                @for (int i = 0; i < Model.MaxRingEquipment; i++)
+                {
+                    var equipment = Model.NinjaInventories
+                        .Where(inv => inv.Equipment.EquipmentType == EquipmentType.Ring)
+                        .Skip(i)
+                        .FirstOrDefault()?.Equipment;
+
+                    @Html.Partial("Equipment", equipment)
+                }
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<style>
+    .right {
+        text-align: right;
+    }
+    
+    table {
+        width: 100%;
+        height: calc(100% - 138px);
+    }
+    
+    td {
+        padding: 10px;
+    }
+    tbody, td, tfoot, th, thead, tr {
+        border-style: none;
+    }
+</style>

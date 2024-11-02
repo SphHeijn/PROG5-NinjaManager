@@ -4,12 +4,23 @@
     <nav class="d-flex flex-column h-100">
         @Html.Partial("_Sidebar")
     </nav>
-        <main role="main" class="w-100 h-100">
+        <main role="main" class="w-100 h-100 overflow-auto">
             @RenderBody()
         </main>
 </body>
 
 
 <script src="~/js/site.js" asp-append-version="true"></script>
+<style>
+    .page-header {
+        padding: 20px 0;
+    }
+    .border-top {
+        border-top: 1px solid #e9ecef;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+    }
+</style>
 @await RenderSectionAsync("Scripts", required: false)
 </html>
