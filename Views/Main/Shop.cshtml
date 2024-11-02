@@ -1,4 +1,6 @@
-﻿@model PROG5_NinjaManager.Models.ShopViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PROG5_NinjaManager.Models
+@model PROG5_NinjaManager.Models.ShopViewModel
 @{
     ViewData["Title"] = "Shop";
 
@@ -56,6 +58,34 @@
 </div>
 
 <div class="border-top"></div>
+
+@if (Model.Ninja != null && Model.FilterType != null)
+{
+    <div class="d-flex flex-row flex-wrap justify-content-start">
+        @{
+            var equipmentType = (EquipmentType)Enum.Parse(typeof(EquipmentType), Model.FilterType);
+            string maxPropertyName = "Max" + equipmentType + "Equipment";
+            int maxEquipmentCount = (int)(Model.Ninja.GetType()
+                .GetProperty(maxPropertyName)
+                ?.GetValue(Model.Ninja) ?? 0);
+            for (int i = 0; i < maxEquipmentCount; i++)
+            {
+                EquipmentViewModel equipment = new EquipmentViewModel(Model.Ninja, Model.Ninja.NinjaInventories
+                    .Where(inv => inv.Equipment.EquipmentType == equipmentType)
+                    .Skip(i)
+                    .FirstOrDefault()?.Equipment, equipmentType, false);
+
+                <div class="text-center">
+                    @Html.Partial("Equipment", equipment)
+                    @if (equipment.Equipment != null)
+                    {
+                        <a asp-action="RemoveEquipment" asp-route-ninjaName="@Model.Ninja.Name" asp-route-equipmentType="@Model.FilterType" asp-route-equipmentName="@equipment.Equipment.Name" class="btn btn-danger mt-2">Remove</a>
+                    }
+                </div>
+            }
+        }
+    </div>
+}
 
 <div class="container my-4">
     <div class="d-flex justify-content-between pb-3">

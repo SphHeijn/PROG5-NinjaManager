@@ -1,7 +1,8 @@
 ﻿@model PROG5_NinjaManager.Models.EquipmentViewModel
 
+
 <a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2" style="text-align: left" asp-action="Shop" asp-route-ninjaName="@(Model.Ninja.Name)" asp-route-equipmentType="@(Model.EquipmentType)">
-    
+
 
     <div class="equipment-name fw-bold mb-1">
         @(Model.Equipment?.Name ?? "Empty")
@@ -34,9 +35,6 @@
     flex-direction: column;
     justify-content: space-between;
 }
-.equipment-item:hover {
-    background-color: #bcbebf;
-}
 
 .equipment-details .equipment-name {
     font-size: 1rem;
@@ -47,3 +45,21 @@
     font-size: 0.85rem;
 }
 </style>
+
+@if (Model.Clickable)
+{
+    <style>
+        .equipment-item:hover {
+            background-color: #bcbebf;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .equipment-item {
+            pointer-events: none;
+            cursor: default;
+        }
+    </style>
+}

@@ -39,13 +39,13 @@ public class MainController : Controller
 
         return View(ninja);
     }
-    
+
     [Route("NinjaList/CreateNinja")]
     public IActionResult CreateNinja()
     {
         return View("CreateOrEditNinja", new CreateOrEditNinjaViewModel(new Ninja()));
     }
-    
+
     public IActionResult SaveNinja(CreateOrEditNinjaViewModel viewModel)
     {
         Ninja ninja = viewModel.Ninja;
@@ -75,7 +75,7 @@ public class MainController : Controller
         _context.SaveChanges();
         return RedirectToAction("NinjaList");
     }
-    
+
     [Route("NinjaList/{ninjaName}/Edit")]
     public IActionResult EditNinja(string ninjaName)
     {
@@ -84,7 +84,7 @@ public class MainController : Controller
         ViewData["IsEditMode"] = ninja != null;
         return View("CreateOrEditNinja", new CreateOrEditNinjaViewModel(ninja ?? new Ninja()));
     }
-    
+
     public IActionResult UpdateNinja(Ninja ninja)
     {
         if (!ModelState.IsValid)
@@ -105,17 +105,17 @@ public class MainController : Controller
 
         return RedirectToAction("NinjaList");
     }
-    
+
     [Route("/NinjaList/Delete/{ninjaName}")]
-    public IActionResult DeleteNinja(string ninjaName) 
-    { 
+    public IActionResult DeleteNinja(string ninjaName)
+    {
         var ninja = _context.Ninjas.FirstOrDefault(n => n.Name == ninjaName);
-        
-        if (ninja != null) 
+
+        if (ninja != null)
         {
             var inventoriesToRemove = _context.NinjaInventories.Where(ni => ni.NinjaName == ninjaName);
             _context.NinjaInventories.RemoveRange(inventoriesToRemove);
-            
+
             _context.Ninjas.Remove(ninja);
             _context.SaveChanges();
         }
@@ -135,16 +135,22 @@ public class MainController : Controller
     public IActionResult Shop(string ninjaName, string equipmentType)
     {
         var equipments = _context.Equipments.AsEnumerable(); // Retrieve data from database first
-        var ninja = _context.Ninjas.FirstOrDefault(n => n.Name == ninjaName);
+        var ninja = _context.Ninjas.Include(n => n.NinjaInventories) // Load NinjaInventories collection
+            .ThenInclude(ni => ni.Equipment).FirstOrDefault(n => n.Name == ninjaName);
 
         if (!string.IsNullOrEmpty(equipmentType))
         {
             // Perform filtering in memory
+            var ninjaEquipmentNames = ninja.NinjaInventories.Select(ni => ni.Equipment.Name).ToList();
+
+            // Filter the equipments based on the EquipmentType and exclude those already owned by the Ninja
+            equipments = equipments
+                .Where(e => e.EquipmentType.ToString() == equipmentType) // Filter by type
+                .Where(e => !ninjaEquipmentNames.Contains(e.Name)) // Exclude already owned equipments
+                .ToList();
             equipments = equipments.Where(e => e.EquipmentType.ToString() == equipmentType);
         }
 
-        ViewBag.FilterType = equipmentType; // Pass selected filter to the view
-        
         return View(new ShopViewModel(equipments, ninja, equipmentType));
     }
 
@@ -156,7 +162,7 @@ public class MainController : Controller
         ViewData["IsEditMode"] = equipment != null;
         return View("CreateOrEditEquipment", new CreateOrEditEquipmentViewModel(equipment ?? new Equipment()));
     }
-    
+
     [Route("NinjaList/NinjaView/{ninjaName}/Shop/Type/{equipmentTypeString}/Equipment/")]
     public IActionResult EditEquipment(string ninjaName, string equipmentTypeString)
     {
@@ -172,7 +178,7 @@ public class MainController : Controller
         {
             ModelState.AddModelError("Equipment.MonetaryValue", "Monetary value must be greater than zero.");
         }
-        
+
         if (!ModelState.IsValid)
         {
             ViewData["IsEditMode"] = true;
@@ -205,7 +211,7 @@ public class MainController : Controller
         {
             var inventoriesToRemove = _context.NinjaInventories.Where(ni => ni.EquipmentName == equipmentName);
             _context.NinjaInventories.RemoveRange(inventoriesToRemove);
-            
+
             _context.Equipments.Remove(equipment);
             _context.SaveChanges();
         }
@@ -235,7 +241,8 @@ public class MainController : Controller
         // If there are validation errors, return to the form view with validation messages
         if (!ModelState.IsValid)
         {
-            return View("CreateOrEditEquipment", new CreateOrEditEquipmentViewModel(viewModel.Ninja, equipment, viewModel.EquipmentType));
+            return View("CreateOrEditEquipment",
+                new CreateOrEditEquipmentViewModel(viewModel.Ninja, equipment, viewModel.EquipmentType));
         }
 
         // If all validation passes, save equipment and redirect to Shop
@@ -245,6 +252,27 @@ public class MainController : Controller
         {
             return RedirectToAction("Shop");
         }
-        return RedirectToAction("Shop", new { ninjaName = viewModel.Ninja?.Name, equipmentType = viewModel.EquipmentType});
+
+        return RedirectToAction("Shop",
+            new { ninjaName = viewModel.Ninja?.Name, equipmentType = viewModel.EquipmentType });
+    }
+
+    [Route("/NinjaList/NinjaView/{ninjaName}/Shop/Type/{equipmentType}/Sell/{equipmentName}")]
+    public IActionResult RemoveEquipment(string ninjaName, string equipmentType, string equipmentName)
+    {
+        Ninja? ninja = _context.Ninjas.Include(n => n.NinjaInventories) // Load NinjaInventories collection
+            .ThenInclude(ni => ni.Equipment).FirstOrDefault(n => n.Name == ninjaName);
+        if (ninja != null)
+        {
+            var inventoriesToRemove = ninja.NinjaInventories
+                .Where(ni =>
+                    ni.Equipment.Name == equipmentName && ni.Equipment.EquipmentType.ToString() == equipmentType)
+                .ToList();
+
+            _context.NinjaInventories.RemoveRange(inventoriesToRemove);
+            _context.SaveChanges();
+        }
+
+        return RedirectToAction("Shop", new { ninjaName, equipmentType });
     }
 }
