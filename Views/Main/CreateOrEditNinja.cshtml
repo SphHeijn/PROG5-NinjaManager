@@ -40,6 +40,13 @@
             else
             {
                 <input asp-for="Ninja.Name" class="form-control"/>
+                <input type="hidden" asp-for="Ninja.MaxHeadEquipment" value = "1"/>
+                <input type="hidden" asp-for="Ninja.MaxHandEquipment" value = "1"/>
+                <input type="hidden" asp-for="Ninja.MaxFeetEquipment" value = "1"/>
+                <input type="hidden" asp-for="Ninja.MaxNecklaceEquipment" value = "1"/>
+                <input type="hidden" asp-for="Ninja.MaxChestEquipment" value = "1"/>
+                <input type="hidden" asp-for="Ninja.MaxRingEquipment" value = "1"/>
+                
             }
             <span asp-validation-for="Ninja.Name" class="text-danger"></span>
         </div>
