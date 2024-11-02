@@ -39,6 +39,90 @@ public class MainController : Controller
 
         return View(ninja);
     }
+    
+    [Route("NinjaList/CreateNinja")]
+    public IActionResult CreateNinja()
+    {
+        return View("CreateOrEditNinja", new CreateOrEditNinjaViewModel(new Ninja()));
+    }
+    
+    public IActionResult SaveNinja(CreateOrEditNinjaViewModel viewModel)
+    {
+        Ninja ninja = viewModel.Ninja;
+        // Check for empty or invalid fields and add error messages to ModelState
+        if (string.IsNullOrEmpty(ninja.Name))
+        {
+            ModelState.AddModelError("Name", "Name is required.");
+        }
+        else if (_context.Ninjas.Any(n => n.Name == ninja.Name))
+        {
+            ModelState.AddModelError("Name", "A ninja with this name already exists.");
+        }
+
+        if (ninja.Gold < 0)
+        {
+            ModelState.AddModelError("Gold", "Gold must be zero or a positive value.");
+        }
+
+        // If there are validation errors, return to the form view with validation messages
+        if (!ModelState.IsValid)
+        {
+            return View("CreateOrEditNinja", new CreateOrEditNinjaViewModel(ninja));
+        }
+
+        // If all validation passes, save ninja and redirect to NinjaList
+        _context.Ninjas.Add(ninja);
+        _context.SaveChanges();
+        return RedirectToAction("NinjaList");
+    }
+    
+    [Route("NinjaList/{ninjaName}/Edit")]
+    public IActionResult EditNinja(string ninjaName)
+    {
+        Ninja? ninja = _context.Ninjas.Include(n => n.NinjaInventories) // Load NinjaInventories collection
+            .ThenInclude(ni => ni.Equipment).FirstOrDefault(n => n.Name == ninjaName);
+        ViewData["IsEditMode"] = ninja != null;
+        return View("CreateOrEditNinja", new CreateOrEditNinjaViewModel(ninja ?? new Ninja()));
+    }
+    
+    public IActionResult UpdateNinja(Ninja ninja)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewData["IsEditMode"] = true;
+            return View("CreateOrEditNinja", new CreateOrEditNinjaViewModel(ninja));
+        }
+
+        // Update logic here
+        var existingNinja = _context.Ninjas.FirstOrDefault(n => n.Name == ninja.Name);
+        if (existingNinja != null)
+        {
+            // Update properties
+            existingNinja.Gold = ninja.Gold;
+
+            _context.SaveChanges();
+        }
+
+        return RedirectToAction("NinjaList");
+    }
+    
+    [Route("/NinjaList/Delete/{ninjaName}")]
+    public IActionResult DeleteNinja(string ninjaName) 
+    { 
+        var ninja = _context.Ninjas.FirstOrDefault(n => n.Name == ninjaName);
+        
+        if (ninja != null) 
+        {
+            var inventoriesToRemove = _context.NinjaInventories.Where(ni => ni.NinjaName == ninjaName);
+            _context.NinjaInventories.RemoveRange(inventoriesToRemove);
+            
+            _context.Ninjas.Remove(ninja);
+            _context.SaveChanges();
+        }
+
+        // Redirect to the "NinjaList" page
+        return View("NinjaList"); 
+    }
 
     [Route("Shop")]
     public IActionResult Shop()

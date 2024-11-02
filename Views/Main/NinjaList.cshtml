@@ -43,10 +43,7 @@
                         <td class="d-flex flex-row">
                             <div class="text-start w-50">
                                 <a asp-action="NinjaView" asp-route-ninjaName="@ninja.Name" class="btn btn-primary btn-sm">View</a>
-                            </div>
-                            
-                            <div class="text-end w-50">
-                                <a asp-action="DeleteNinja" asp-route-ninjaName="@ninja.Name" class="btn btn-danger btn-sm">Delete</a>
+                                <a asp-action="EditNinja" asp-route-ninjaName="@ninja.Name" class="btn btn-secondary btn-sm">Edit</a>
                             </div>
                         </td>
                     </tr>

@@ -12,12 +12,8 @@ public class CreateOrEditEquipmentViewModel
     {
         Equipment = equipment;
     }
-
-    public CreateOrEditEquipmentViewModel()
-    {
-        Equipment = new Equipment();
-    }
     
+
     public Equipment Equipment { get; init; }
     public Ninja? Ninja { get; init; }
     public EquipmentType? EquipmentType { get; init; }

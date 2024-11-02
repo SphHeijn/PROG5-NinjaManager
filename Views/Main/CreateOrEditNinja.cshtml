@@ -1,0 +1,96 @@
+@model PROG5_NinjaManager.Models.CreateOrEditNinjaViewModel
+@{
+    ViewData["Title"] = ViewData["IsEditMode"] as bool? == true ? "Edit Ninja" : "Create Ninja";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+
+<div class="page-header">
+    <div class="container h-100 d-flex align-items-center justify-content-between">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
+                <li class="breadcrumb-item mb-0">
+                    <a asp-action="NinjaList" class="fw-bold text-black">NinjaList</a>
+                </li>
+                <li class="breadcrumb-item mb-0 active" aria-current="page">
+                    @(ViewData["IsEditMode"] as bool? == true ?"Edit Ninja" : "Create Ninja")
+                </li>
+            </ol>
+        </nav>
+
+    </div>
+</div>
+
+<div class="border-top"></div>
+
+<div class="container my-4">
+
+    <div class="d-flex justify-content-between pb-3">
+        <h1 class="fs-3 fw-bold">@ViewData["Title"]</h1>
+    </div>
+
+    <form asp-action="@(ViewData["IsEditMode"] as bool? == true ? "UpdateNinja" : "SaveNinja")" method="post">
+        
+        <div class="form-group m-2">
+            <label asp-for="Ninja.Name" class="control-label"></label>
+            @if (ViewData["IsEditMode"] as bool? == true)
+            {
+                <input asp-for="Ninja.Name" class="form-control" readonly="readonly"/>
+            }
+            else
+            {
+                <input asp-for="Ninja.Name" class="form-control"/>
+            }
+            <span asp-validation-for="Ninja.Name" class="text-danger"></span>
+        </div>
+
+        
+
+        <!-- Same input fields as before -->
+        <div class="form-group m-2">
+            <label asp-for="Ninja.Gold" class="control-label">Cost</label>
+            <input asp-for="Ninja.Gold" class="form-control"/>
+            <span asp-validation-for="Ninja.Gold" class="text-danger"></span>
+        </div>
+        
+
+        <!-- Submit button with dynamic text based on action -->
+        <div class="d-flex flex-row justify-content-between">
+            @if (ViewData["IsEditMode"] as bool? == true)
+            {
+                <div class="form-group m-2">
+                    <a href="#" onclick="return confirmDelete('@Model.Ninja.Name');" class="btn btn-danger">Delete</a>
+                </div>
+            }
+            else
+            {
+                <div class="form-group m-2">
+                    <a asp-action="NinjaList" class="btn btn-danger">Cancel</a>
+                </div>
+            }
+            <div class="form-group m-2 ml-auto">
+                <input type="submit" value="@(ViewData["IsEditMode"] as bool? == true ? "Update" : "Create")" class="btn btn-primary"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .page-header {
+        padding: 20px 0;
+    }
+    .border-top {
+        border-top: 1px solid #e9ecef;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+    }
+</style>
+
+<script>
+    function confirmDelete(ninjaName) {
+        if (confirm(`Are you sure you want to delete this ninja: ${ninjaName}?`)) {
+            window.location.href = '/NinjaList/Delete/' + encodeURIComponent(equipmentName);
+        }
+    }
+</script>
