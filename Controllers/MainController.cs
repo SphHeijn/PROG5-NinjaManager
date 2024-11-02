@@ -84,6 +84,11 @@ public class MainController : Controller
 
     public IActionResult UpdateEquipment(Equipment equipment)
     {
+        if (equipment.MonetaryValue <= 0)
+        {
+            ModelState.AddModelError("Equipment.MonetaryValue", "Monetary value must be greater than zero.");
+        }
+        
         if (!ModelState.IsValid)
         {
             ViewData["IsEditMode"] = true;
@@ -143,21 +148,6 @@ public class MainController : Controller
             ModelState.AddModelError("Equipment.MonetaryValue", "Monetary value must be greater than zero.");
         }
 
-        if (equipment.Strength < 0)
-        {
-            ModelState.AddModelError("Equipment.Strength", "Strength must be zero or a positive value.");
-        }
-
-        if (equipment.Intelligence < 0)
-        {
-            ModelState.AddModelError("Equipment.Intelligence", "Intelligence must be zero or a positive value.");
-        }
-
-        if (equipment.Agility < 0)
-        {
-            ModelState.AddModelError("Equipment.Agility", "Agility must be zero or a positive value.");
-        }
-
         // If there are validation errors, return to the form view with validation messages
         if (!ModelState.IsValid)
         {
@@ -172,6 +162,5 @@ public class MainController : Controller
             return RedirectToAction("Shop");
         }
         return RedirectToAction("Shop", new { ninjaName = viewModel.Ninja?.Name, equipmentType = viewModel.EquipmentType});
-    
     }
 }
