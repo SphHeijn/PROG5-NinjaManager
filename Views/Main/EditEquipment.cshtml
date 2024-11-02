@@ -1,0 +1,85 @@
+@model PROG5_NinjaManager.Equipment
+@{
+    ViewData["Title"] = ViewData["IsEditMode"] as bool? == true ? "Edit Equipment" : "Create Equipment";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<div class="page-header">
+    <div class="container h-100 d-flex align-items-center justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 bg-dark bg-opacity-10 p-2 rounded-3">
+                <li class="breadcrumb-item mb-0 active" aria-current="page">Equipment / @ViewData["Title"]</li>
+            </ol>
+        </nav>
+
+    </div>
+</div>
+
+<div class="border-top"></div>
+
+<div class="container my-4">
+    
+    <div class="d-flex justify-content-between pb-3">
+        <h1 class="fs-3 fw-bold">@ViewData["Title"]</h1>
+    </div>
+    
+    <form asp-action="@(ViewData["IsEditMode"] as bool? == true ? "UpdateEquipment" : "SaveEquipment")" method="post">
+        <div class="form-group m-2">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group m-2">
+            <label asp-for="EquipmentType" class="control-label"></label>
+            <select asp-for="EquipmentType" class="form-control">
+                <option value="Head">Head</option>
+                <option value="Hand">Hand</option>
+                <option value="Foot">Foot</option>
+                <option value="Necklace">Necklace</option>
+                <option value="Chest">Chest</option>
+                <option value="Ring">Ring</option>
+            </select>
+            <span asp-validation-for="EquipmentType" class="text-danger"></span>
+        </div>
+
+        <!-- Same input fields as before -->
+        <div class="form-group m-2">
+            <label asp-for="MonetaryValue" class="control-label"></label>
+            <input asp-for="MonetaryValue" class="form-control"/>
+            <span asp-validation-for="MonetaryValue" class="text-danger"></span>
+        </div>
+        <div class="form-group m-2">
+            <label asp-for="Strength" class="control-label"></label>
+            <input asp-for="Strength" class="form-control"/>
+            <span asp-validation-for="Strength" class="text-danger"></span>
+        </div>
+        <div class="form-group m-2">
+            <label asp-for="Intelligence" class="control-label"></label>
+            <input asp-for="Intelligence" class="form-control"/>
+            <span asp-validation-for="Intelligence" class="text-danger"></span>
+        </div>
+        <div class="form-group m-2">
+            <label asp-for="Agility" class="control-label"></label>
+            <input asp-for="Agility" class="form-control"/>
+            <span asp-validation-for="Agility" class="text-danger"></span>
+        </div>
+
+        <!-- Submit button with dynamic text based on action -->
+        <div class="form-group m-2">
+            <input type="submit" value="@(ViewData["IsEditMode"] as bool? == true ? "Update" : "Create")" class="btn btn-primary"/>
+        </div>
+    </form>
+</div>
+
+<style>
+    .page-header {
+        padding: 20px 0;
+    }
+    .border-top {
+        border-top: 1px solid #e9ecef;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+    }
+</style>
