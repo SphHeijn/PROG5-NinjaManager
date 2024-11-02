@@ -121,7 +121,7 @@ public class MainController : Controller
         }
 
         // Redirect to the "NinjaList" page
-        return View("NinjaList"); 
+        return RedirectToAction("NinjaList");
     }
 
     [Route("Shop")]
