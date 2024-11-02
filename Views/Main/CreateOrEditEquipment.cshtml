@@ -26,7 +26,7 @@
     <form asp-action="@(ViewData["IsEditMode"] as bool? == true ? "UpdateEquipment" : "SaveEquipment")" method="post">
         <div class="form-group m-2">
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control"/>
+            <input asp-for="Name" class="form-control" @(ViewData["Title"] as string == "IsEditMode" ? "readonly" : "")/>
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
@@ -45,7 +45,7 @@
 
         <!-- Same input fields as before -->
         <div class="form-group m-2">
-            <label asp-for="MonetaryValue" class="control-label"></label>
+            <label asp-for="MonetaryValue" class="control-label">test</label>
             <input asp-for="MonetaryValue" class="form-control"/>
             <span asp-validation-for="MonetaryValue" class="text-danger"></span>
         </div>

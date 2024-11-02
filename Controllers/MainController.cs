@@ -60,7 +60,7 @@ public class MainController : Controller
     {
         var equipment = _context.Equipments.FirstOrDefault(e => e.Name == equipmentName);
         ViewData["IsEditMode"] = equipment != null;
-        return View("EditEquipment", equipment ?? new Equipment());
+        return View("CreateOrEditEquipment", equipment ?? new Equipment());
     }
 
     public IActionResult UpdateEquipment(Equipment equipment)
@@ -68,7 +68,7 @@ public class MainController : Controller
         if (!ModelState.IsValid)
         {
             ViewData["IsEditMode"] = true;
-            return View("EditEquipment", equipment);
+            return View("CreateOrEditEquipment", equipment);
         }
     
         // Update logic here
@@ -123,7 +123,7 @@ public class MainController : Controller
         // If there are validation errors, return to the form view with validation messages
         if (!ModelState.IsValid)
         {
-            return View("EditEquipment", equipment);
+            return View("CreateOrEditEquipment", equipment);
         }
 
         // If all validation passes, save equipment and redirect to Shop
