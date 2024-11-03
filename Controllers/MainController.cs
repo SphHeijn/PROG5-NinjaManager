@@ -309,7 +309,7 @@ public class MainController : Controller
             return RedirectToAction("Shop", new { ninjaName, equipmentType });
         }
         
-        // check how many equipment the ninja can have
+        // check how much equipment the ninja can have
         var maxEquipmentOfType = ninjaEntity.GetMaxEquipmentOfType(equipment.EquipmentType);
         var amountOfEquipmentOfType = ninjaEntity.NinjaInventories.Count(ni => ni.Equipment.EquipmentType == equipment.EquipmentType);
         if (amountOfEquipmentOfType >= maxEquipmentOfType)
