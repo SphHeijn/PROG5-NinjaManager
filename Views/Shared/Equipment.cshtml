@@ -1,50 +1,66 @@
 ﻿@model PROG5_NinjaManager.Models.EquipmentViewModel
 
 
-<a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2" style="text-align: left" asp-action="Shop" asp-route-ninjaName="@(Model.Ninja.Name)" asp-route-equipmentType="@(Model.EquipmentType)">
+<style>
+    .equipment-item {
+        text-decoration: none;
+        user-select: none;
+        border: 2px solid black;
+        background-color: #f8f9fa;
+        width: auto; /* Allows the width to adapt to content */
+        max-width: 250px; /* Sets a reasonable maximum width */
+        min-width: 150px; /* Ensures a minimum width */
+        height: auto; /* Adapts height based on content */
+        padding: 10px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
+    .equipment-details .equipment-name {
+        font-size: 1rem;
+        color: #333;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .equipment-details .equipment-stats div {
+        font-size: 0.85rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    /* Hover effect for clickable items */
+    .equipment-item:hover {
+        background-color: #e0e0e0;
+    }
+</style>
+
+<a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2" style="text-align: left"
+   asp-action="Shop" asp-route-ninjaName="@(Model.Ninja.Name)" asp-route-equipmentType="@(Model.EquipmentType)">
 
     <div class="equipment-name fw-bold mb-1">
         @(Model.Equipment?.Name ?? "Empty")
     </div>
+
     @if (Model.Equipment != null)
     {
-        <div class="equipment-stats text-muted small w-100 h-100">
-            <div>💰 Value: @Model.Equipment.MonetaryValue</div>
-            <div>💪 Strength: @Model.Equipment.Strength</div>
-            <div>🧠 Intelligence: @Model.Equipment.Intelligence</div>
-            <div>🏃 Agility: @Model.Equipment.Agility</div>
-        </div>
+    <div class="equipment-stats text-muted small">
+        <div>💰 Value: @Model.Equipment.MonetaryValue</div>
+        <div>💪 Strength: @Model.Equipment.Strength</div>
+        <div>🧠 Intelligence: @Model.Equipment.Intelligence</div>
+        <div>🏃 Agility: @Model.Equipment.Agility</div>
+    </div>
     }
     else
     {
-        <div class="equipment-stats text-muted small">No Equipment</div>
+    <div class="equipment-stats text-muted small">No Equipment</div>
     }
 </a>
 
-<style>
-
-.equipment-item {
-    text-decoration: none;
-    user-select: none;
-    border: 2px solid black;
-    background-color: #f8f9fa;
-    width: 150px;
-    height: 130px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.equipment-details .equipment-name {
-    font-size: 1rem;
-    color: #333;
-}
-
-.equipment-details .equipment-stats div {
-    font-size: 0.85rem;
-}
-</style>
 
 @if (Model.Clickable)
 {
