@@ -126,6 +126,20 @@ namespace PROG5_NinjaManager
         
             
         public ICollection<NinjaInventory> NinjaInventories { get; set; } = new List<NinjaInventory>();
+
+        public int GetMaxEquipmentOfType(EquipmentType equipmentType)
+        {
+            return equipmentType switch
+            {
+                EquipmentType.Head => MaxHeadEquipment,
+                EquipmentType.Hand => MaxHandEquipment,
+                EquipmentType.Foot => MaxFeetEquipment,
+                EquipmentType.Necklace => MaxNecklaceEquipment,
+                EquipmentType.Chest => MaxChestEquipment,
+                EquipmentType.Ring => MaxRingEquipment,
+                _ => 0
+            };
+        }
     }
 
     public class NinjaInventory

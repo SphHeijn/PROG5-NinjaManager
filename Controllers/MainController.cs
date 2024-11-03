@@ -275,4 +275,63 @@ public class MainController : Controller
 
         return RedirectToAction("Shop", new { ninjaName, equipmentType });
     }
+
+    [Route("NinjaList/NinjaView/{ninjaName}/Shop/Buy/{equipmentName}")]
+    public IActionResult BuyEquipment(string ninjaName, string equipmentName, string equipmentType)
+    {
+        var ninjaEntity = _context.Ninjas
+            .Include(n => n.NinjaInventories)
+            .ThenInclude(ni => ni.Equipment)
+            .FirstOrDefault(n => n.Name == ninjaName);
+                           
+        var equipment = _context.Equipments.AsNoTracking()
+            .FirstOrDefault(e => e.Name == equipmentName);
+
+        // Check if the ninja or equipment does not exist
+        if (ninjaEntity == null || equipment == null)
+        {
+            TempData["ErrorMessage"] = "Invalid purchase attempt. Please try again.";
+            return RedirectToAction("Shop", new { ninjaName, equipmentType });
+        }
+
+        // Check if ninja has enough gold to purchase
+        if (ninjaEntity.Gold < equipment.MonetaryValue)
+        {
+            TempData["ErrorMessage"] = "Not enough gold to buy this equipment.";
+            return RedirectToAction("Shop", new { ninjaName, equipmentType });
+        }
+
+        // Check if ninja already owns this equipment
+        var ownsEquipment = ninjaEntity.NinjaInventories.Any(ni => ni.Equipment.Name == equipmentName);
+        if (ownsEquipment)
+        {
+            TempData["ErrorMessage"] = "This equipment is already in your inventory.";
+            return RedirectToAction("Shop", new { ninjaName, equipmentType });
+        }
+        
+        // check how many equipment the ninja can have
+        var maxEquipmentOfType = ninjaEntity.GetMaxEquipmentOfType(equipment.EquipmentType);
+        var amountOfEquipmentOfType = ninjaEntity.NinjaInventories.Count(ni => ni.Equipment.EquipmentType == equipment.EquipmentType);
+        if (amountOfEquipmentOfType >= maxEquipmentOfType)
+        {
+            TempData["ErrorMessage"] = "You can only have "+maxEquipmentOfType+" equipment at a time.";
+            return RedirectToAction("Shop", new { ninjaName, equipmentType });
+        }
+
+        // Deduct gold and add equipment to ninja's inventory
+        ninjaEntity.Gold -= equipment.MonetaryValue;
+        ninjaEntity.NinjaInventories.Add(new NinjaInventory 
+        { 
+            Ninja = ninjaEntity, 
+            EquipmentName = equipment.Name
+        });
+
+        _context.SaveChanges();
+
+        // Redirect to NinjaView after successful purchase
+        return RedirectToAction("NinjaView", new { ninjaName });
+    }
+
+
+    
 }

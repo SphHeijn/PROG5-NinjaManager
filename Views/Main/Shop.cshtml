@@ -103,6 +103,7 @@
                 <th>Strength</th>
                 <th>Intelligence</th>
                 <th>Agility</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -116,9 +117,15 @@
                     <td>@equipment.Intelligence</td>
                     <td>@equipment.Agility</td>
                     <td class="text-end">
-                        @if (!string.IsNullOrEmpty(Model.FilterType))
+                        @if (Model.Ninja != null)
                         {
-                            <a asp-action="Buy" asp-route-equipmentName="@equipment.Name" class="btn btn-success btn-sm">Buy</a>
+                            <a asp-action="BuyEquipment" asp-route-equipmentName="@equipment.Name" asp-route-equipmentType="@equipment.EquipmentType" asp-route-ninjaName="@Model.Ninja.Name" class="btn btn-success btn-sm">Buy</a>
+                            @if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @TempData["ErrorMessage"]
+                                </div>
+                            }
                         }
                         else
                         {
