@@ -107,6 +107,12 @@
             </tr>
             </thead>
             <tbody>
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
             @foreach (var equipment in Model.Equipments)
             {
                 <tr>
@@ -120,12 +126,6 @@
                         @if (Model.Ninja != null)
                         {
                             <a asp-action="BuyEquipment" asp-route-equipmentName="@equipment.Name" asp-route-equipmentType="@equipment.EquipmentType" asp-route-ninjaName="@Model.Ninja.Name" class="btn btn-success btn-sm">Buy</a>
-                            @if (TempData["ErrorMessage"] != null)
-                            {
-                                <div class="alert alert-danger">
-                                    @TempData["ErrorMessage"]
-                                </div>
-                            }
                         }
                         else
                         {

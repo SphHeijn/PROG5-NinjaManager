@@ -11,7 +11,7 @@ using PROG5_NinjaManager;
 namespace PROG5_NinjaManager.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20241031122639_Initial")]
+    [Migration("20241103171714_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -139,7 +139,7 @@ namespace PROG5_NinjaManager.Migrations
                         new
                         {
                             Name = "Erratic Ephemeron",
-                            Gold = 20,
+                            Gold = 2000,
                             MaxChestEquipment = 1,
                             MaxFeetEquipment = 1,
                             MaxHandEquipment = 1,

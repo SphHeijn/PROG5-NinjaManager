@@ -86,7 +86,7 @@ namespace PROG5_NinjaManager.Migrations
             migrationBuilder.InsertData(
                 table: "Ninjas",
                 columns: new[] { "Name", "Gold", "MaxChestEquipment", "MaxFeetEquipment", "MaxHandEquipment", "MaxHeadEquipment", "MaxNecklaceEquipment", "MaxRingEquipment" },
-                values: new object[] { "Erratic Ephemeron", 20, 1, 1, 1, 1, 1, 1 });
+                values: new object[] { "Erratic Ephemeron", 2000, 1, 1, 1, 1, 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "NinjaInventories",

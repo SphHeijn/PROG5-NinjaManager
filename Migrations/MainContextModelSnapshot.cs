@@ -136,7 +136,7 @@ namespace PROG5_NinjaManager.Migrations
                         new
                         {
                             Name = "Erratic Ephemeron",
-                            Gold = 20,
+                            Gold = 2000,
                             MaxChestEquipment = 1,
                             MaxFeetEquipment = 1,
                             MaxHandEquipment = 1,

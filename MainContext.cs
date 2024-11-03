@@ -49,7 +49,7 @@ namespace PROG5_NinjaManager
                 new Ninja
                 {
                     Name = "Erratic Ephemeron",
-                    Gold = 20,
+                    Gold = 2000,
                     MaxHeadEquipment = 1,
                     MaxHandEquipment = 1,
                     MaxFeetEquipment = 1,

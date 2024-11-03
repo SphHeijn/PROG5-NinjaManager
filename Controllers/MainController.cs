@@ -295,7 +295,9 @@ public class MainController : Controller
         }
 
         // Check if ninja has enough gold to purchase
-        if (ninjaEntity.Gold < equipment.MonetaryValue)
+        int totalGearValue = ninjaEntity.NinjaInventories.Sum(inv => inv.Equipment.MonetaryValue);
+        int remainingGold = ninjaEntity.Gold - totalGearValue;
+        if (remainingGold < equipment.MonetaryValue)
         {
             TempData["ErrorMessage"] = "Not enough gold to buy this equipment.";
             return RedirectToAction("Shop", new { ninjaName, equipmentType });
@@ -318,8 +320,7 @@ public class MainController : Controller
             return RedirectToAction("Shop", new { ninjaName, equipmentType });
         }
 
-        // Deduct gold and add equipment to ninja's inventory
-        ninjaEntity.Gold -= equipment.MonetaryValue;
+        //add equipment to ninja's inventory
         ninjaEntity.NinjaInventories.Add(new NinjaInventory 
         { 
             Ninja = ninjaEntity, 
@@ -331,7 +332,4 @@ public class MainController : Controller
         // Redirect to NinjaView after successful purchase
         return RedirectToAction("NinjaView", new { ninjaName });
     }
-
-
-    
 }
