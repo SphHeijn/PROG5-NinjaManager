@@ -1,7 +1,7 @@
 ﻿@model PROG5_NinjaManager.Models.EquipmentViewModel
 
 
-<a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2" style="text-align: left" asp-action="Shop" asp-route-ninjaName="@(Model.Ninja.Name)" asp-route-equipmentType="@(Model.EquipmentType)">
+<a class="equipment-item align-items-center p-2 mb-2 rounded equipment-details m-2 w-25" style="text-align: left" asp-action="Shop" asp-route-ninjaName="@(Model.Ninja.Name)" asp-route-equipmentType="@(Model.EquipmentType)">
 
 
     <div class="equipment-name fw-bold mb-1">
@@ -9,7 +9,7 @@
     </div>
     @if (Model.Equipment != null)
     {
-        <div class="equipment-stats text-muted small w-100">
+        <div class="equipment-stats text-muted small w-100 h-100">
             <div>💰 Value: @Model.Equipment.MonetaryValue</div>
             <div>💪 Strength: @Model.Equipment.Strength</div>
             <div>🧠 Intelligence: @Model.Equipment.Intelligence</div>
